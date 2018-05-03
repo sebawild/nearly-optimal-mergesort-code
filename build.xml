@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="nearly-optimal-mergesort" default="package">
+    <property name="version" value="1.8"/>
+    <property name="haltonfailure" value="no"/>
+    <property name="out" value="out"/>
+    <property name="dist.src" value="src"/>
+    <property name="dist.lib" value="lib"/>
+    <property name="dist.classes" value="${out}/dist/${ant.project.name}"/>
+    <property name="dist.config" value="config"/>
+    <property name="test.src" value="test"/>
+    <property name="test.lib" value="lib"/>
+    <property name="test.classes" value="${out}/test/${ant.project.name}"/>
+    <property name="exploded" value="out/exploded/${ant.project.name}"/>
+    <property name="exploded.classes" value="${exploded}/WEB-INF/classes"/>
+    <property name="exploded.lib" value="${exploded}/WEB-INF/lib"/>
+    <property name="reports.out" value="${out}/reports"/>
+    <property name="junit.out" value="${reports.out}/junit"/>
+
+    <path id="dist.classpath">
+        <pathelement location="${dist.classes}"/>
+        <pathelement location="${dist.config}"/>
+        <fileset dir="${dist.lib}">
+            <include name="**/*.jar"/>
+            <exclude name="**/junit*.jar"/>
+            <exclude name="**/*test*.jar"/>
+        </fileset>
+    </path>
+    <path id="test.classpath">
+        <path refid="dist.classpath"/>
+        <pathelement location="${test.classes}"/>
+        <fileset dir="${test.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <available file="${out}" property="outputExists"/>
+
+    <target name="clean" description="remove all generated artifacts" if="outputExists">
+        <delete dir="${out}" includeEmptyDirs="true"/>
+        <delete dir="${reports.out}" includeEmptyDirs="true"/>
+    </target>
+
+    <target name="create" description="create the output directories"
+            unless="outputExists">
+        <mkdir dir="${dist.classes}"/>
+        <mkdir dir="${test.classes}"/>
+        <mkdir dir="${reports.out}"/>
+        <mkdir dir="${junit.out}"/>
+        <mkdir dir="${exploded.classes}"/>
+        <mkdir dir="${exploded.lib}"/>
+    </target>
+
+    <target name="compile" description="compile all .java source files"
+            depends="create">
+        <!-- Debug output <property name="dist.class.path" refid="dist.class.path"/> <echo message="${dist.class.path}"/> -->
+        <javac srcdir="src" destdir="${out}/dist/${ant.project.name}" debug="on"
+               source="${version}">
+            <classpath refid="dist.classpath"/>
+            <include name="**/*.java"/>
+        </javac>
+        <javac srcdir="${test.src}" destdir="${out}/test/${ant.project.name}" debug="on"
+               source="${version}">
+            <classpath refid="test.classpath"/>
+            <include name="**/*Test.java"/>
+        </javac>
+    </target>
+
+    <target name="test" description="run all junit tests"
+            depends="compile">
+        <!-- Debug output <property name="test.class.path" refid="test.class.path"/> <echo message="${test.class.path}"/> -->
+        <junit printsummary="yes" haltonfailure="${haltonfailure}">
+            <classpath refid="test.classpath"/>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${junit.out}">
+                <fileset dir="${test.src}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport todir="${junit.out}">
+            <fileset dir="${junit.out}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report todir="${junit.out}" format="frames"/>
+        </junitreport>
+    </target>
+
+    <target name="exploded" description="create exploded deployment" depends="compile">
+        <copy todir="${exploded.classes}">
+            <fileset dir="${dist.classes}"/>
+        </copy>
+        <copy todir="${exploded.lib}">
+            <fileset dir="${dist.lib}"/>
+        </copy>
+    </target>
+
+    <target name="package" description="create package file" depends="exploded">
+        <jar destfile="${out}/${ant.project.name}.jar" basedir="${dist.classes}"
+             includes="**/*.class" manifest="${dist.config}/META-INF/MANIFEST.MF"/>
+    </target>
+</project>
