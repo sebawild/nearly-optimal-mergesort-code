@@ -40,7 +40,7 @@ public class Timsort {
 	public static final Sorter INSTANCE = new Sorter() {
 		@Override
 		public void sort(final int[] A, final int left, final int right) {
-			sort(A, left, right +1);
+			Timsort.sort(A, left, right +1);
 		}
         @Override
        	public String toString() {

@@ -85,7 +85,7 @@ public class Mergesorts {
    				inputs = Inputs.randomRunsWithSentinelInputDelta(Integer.parseInt(args[3].substring(9)));
    			if (args[3].startsWith("iid"))
    				inputs = Inputs.randomIidInts(Integer.parseInt(args[3].substring(3)));
-   			if (args[3].startsWith("killtim"))
+   			if (args[3].startsWith("timdrag"))
    				inputs = Inputs.timsortDrag(Integer.parseInt(args[3].substring(7)));
    		}
 
