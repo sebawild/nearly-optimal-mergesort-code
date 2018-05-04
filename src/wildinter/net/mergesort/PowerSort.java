@@ -1,6 +1,7 @@
 package wildinter.net.mergesort;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import static wildinter.net.mergesort.MergesAndRuns.extendAndReverseRunRight;
 import static wildinter.net.mergesort.MergesAndRuns.extendWeaklyIncreasingRunRight;
@@ -249,8 +250,12 @@ public class PowerSort implements Sorter {
 
 //		System.exit(1);
 
-		int[] A = new int[]{91,92,81,71,72,73,74,75,61,62,63,64,51,52,41,42,43,44,45,31,21,11};
-		A = new int[] {4, 3, 5, 1, 2};
+
+		// run lengths from example in paper: 5, 3, 3, 14, 1, 2
+		int[] A = new int[2*(5+3+3+14+1+2)];
+		Inputs.fillWithUpAndDownRuns(A, Arrays.asList(5, 3, 3, 14, 1, 2),2,new Random());
+		System.out.println(java.util.Arrays.toString(A));
+		minRunLen = 1;
 		powersort(A, 0, A.length-1);
 		System.out.println(java.util.Arrays.toString(A));
 

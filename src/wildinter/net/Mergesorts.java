@@ -74,22 +74,20 @@ public class Mergesorts {
    			seed = Long.parseLong(args[2]);
    		}
 
-   		Inputs.InputGenerator inputs = Inputs.RANDOM_PERMUTATIONS_WITH_SENTINEL;
+   		Inputs.InputGenerator inputs = Inputs.RANDOM_PERMUTATIONS_GENERATOR;
    		if (args.length >= 4) {
    			if (args[3].equalsIgnoreCase("rp"))
-   				inputs = Inputs.RANDOM_PERMUTATIONS_WITH_SENTINEL;
+   				inputs = Inputs.RANDOM_PERMUTATIONS_GENERATOR;
    			if (args[3].startsWith("runs"))
    				inputs = Inputs.randomRunsGenerator(Integer.parseInt(
    						args[3].substring(4).replaceAll("\\D","")));
-   			if (args[3].startsWith("runsdelta"))
-   				inputs = Inputs.randomRunsWithSentinelInputDelta(Integer.parseInt(args[3].substring(9)));
    			if (args[3].startsWith("iid"))
-   				inputs = Inputs.randomIidInts(Integer.parseInt(args[3].substring(3)));
+   				inputs = Inputs.randomIidIntsGenerator(Integer.parseInt(args[3].substring(3)));
    			if (args[3].startsWith("timdrag"))
-   				inputs = Inputs.timsortDrag(Integer.parseInt(args[3].substring(7)));
+   				inputs = Inputs.timsortDragGenerator(Integer.parseInt(args[3].substring(7)));
    		}
 
-   		String outFileName = "sorting";
+   		String outFileName = "mergesorts";
    		if (args.length >= 5) outFileName = args[4];
 
    		timeSorts(algos, reps, sizes, seed, inputs, outFileName);
@@ -105,10 +103,10 @@ public class Mergesorts {
    		outFileName += ".csv";
    		File outFile = new File(outFileName);
 
-   		System.out.println("algos = " + algos);
-   		System.out.println("sizes = " + sizes);
-   		System.out.println("reps  = " + reps);
-   		System.out.println("seed  = " + seed);
+   		System.out.println("algos  = " + algos);
+   		System.out.println("sizes  = " + sizes);
+   		System.out.println("reps   = " + reps);
+   		System.out.println("seed   = " + seed);
    		System.out.println("inputs = " + inputs);
    		System.out.println("Writing to " + outFile.getAbsolutePath());
 

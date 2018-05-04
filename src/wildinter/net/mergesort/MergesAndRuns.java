@@ -1,7 +1,6 @@
 package wildinter.net.mergesort;
 
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Merging procedures and some related helpers
@@ -120,18 +119,6 @@ public class MergesAndRuns {
 			while (i > left && A[i-1] <= A[i]) --i;
 		}
 		return i;
-	}
-
-	public static void overwriteWithRandomRunsWithOffset(final int[] A, final int n, final int expRunLen, final Random random) {
-		int maxOffset = (Integer.MAX_VALUE / n) >> 3;
-//		maxOffset = 20;
-		A[0] = maxOffset;
-		for (int i = 1; i <= n; ++i) {
-			A[i] = A[i-1] + (random.nextInt(expRunLen) == 0 ?
-					- random.nextInt(A[i-1]) :
-					+ random.nextInt(maxOffset));
-		}
-		A[0] = Integer.MIN_VALUE;
 	}
 
 
