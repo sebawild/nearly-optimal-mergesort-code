@@ -12,6 +12,11 @@ execute
 
 The build requires a recent JDK 8, Oracle's version is recommended.
 
+Make sure to use the paper release:  
+[![DOI](https://zenodo.org/badge/132030229.svg)](https://zenodo.org/badge/latestdoi/132030229)
+
+
+
 This produces several files in the current directory.
 
  * The *.out files show the progress made in the individual runs 
