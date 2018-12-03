@@ -51,7 +51,7 @@ public class PeekSort implements Sorter {
 	public static void peeksort(int[] A, int left, int right, int leftRunEnd, int rightRunStart, final int[] B) {
 		if (leftRunEnd == right || rightRunStart == left) return;
 		if (right - left + 1 <= insertionSortThreshold) {
-			// Possible optimization: use insertionsortRight of right run longer.
+			// Possible optimization: use insertionsortRight if right run longer.
 			Insertionsort.insertionsort(A, left, right, leftRunEnd - left + 1);
 			return;
 		}
@@ -68,11 +68,11 @@ public class PeekSort implements Sorter {
 			// find middle run
 			final int i, j;
 			if (A[mid] <= A[mid+1]) {
-				i = extendWeaklyIncreasingRunLeft(A, mid, leftRunEnd + 1);
-				j = mid+1 == rightRunStart ? mid : extendWeaklyIncreasingRunRight(A, mid+1, rightRunStart - 1);
+				i = extendWeaklyIncreasingRunLeft(A, mid, left == leftRunEnd ? left : leftRunEnd+1);
+				j = mid+1 == rightRunStart ? mid : extendWeaklyIncreasingRunRight(A, mid+1, right == rightRunStart ? right : rightRunStart-1);
 			} else {
-				i = extendStrictlyDecreasingRunLeft(A, mid, leftRunEnd + 1);
-				j = mid+1 == rightRunStart ? mid : extendStrictlyDecreasingRunRight(A, mid+1,rightRunStart - 1);
+				i = extendStrictlyDecreasingRunLeft(A, mid, left == leftRunEnd ? left : leftRunEnd+1);
+				j = mid+1 == rightRunStart ? mid : extendStrictlyDecreasingRunRight(A, mid+1,right == rightRunStart ? right : rightRunStart-1);
 				reverseRange(A, i, j);
 			}
 			if (i == left && j == right) return;
@@ -107,8 +107,8 @@ public class PeekSort implements Sorter {
 			mergeRuns(A, left, rightRunStart, right, B);
 		} else {
 			// find middle run
-			int i = extendWeaklyIncreasingRunLeft(A, mid, leftRunEnd+1);
-			int j = extendWeaklyIncreasingRunRight(A, mid, rightRunStart-1) ;
+			int i = extendWeaklyIncreasingRunLeft(A, mid, left == leftRunEnd ? left : leftRunEnd+1);
+			int j = extendWeaklyIncreasingRunRight(A, mid, right == rightRunStart ? right : rightRunStart-1) ;
 			if (i == left && j == right) return;
 			if (mid - i < j - mid) {
 				// |XX     x|xxxx   X|
