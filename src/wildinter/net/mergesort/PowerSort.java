@@ -51,11 +51,11 @@ public class PowerSort implements Sorter {
 	}
 
 	private static int nodePower(int left, int right, int startA, int startB, int endB) {
-		int twoN = (right - left + 1) << 1; // 2*n
-		long l = startA + startB - (left << 1);
-		long r = startB + endB + 1 - (left << 1);
-		int a = (int) ((l << 31) / twoN);
-		int b = (int) ((r << 31) / twoN);
+		int n = (right - left + 1);
+		long l = (long) startA + (long) startB - ((long) left << 1); // 2*middleA
+		long r = (long) startB + (long) endB + 1 - ((long) left << 1); // 2*middleB
+		int a = (int) ((l << 30) / n); // middleA / 2n
+		int b = (int) ((r << 30) / n); // middleB / 2n
 		return Integer.numberOfLeadingZeros(a ^ b);
 	}
 
@@ -80,14 +80,13 @@ public class PowerSort implements Sorter {
 	}
 
 	private static int nodePowerLoop(int left, int right, int startA, int startB, int endB) {
+		assert right < (1 << 30); // otherwise nt2 will overflow
 		int nt2 = (right - left + 1) << 1; // 2*n
 		int n1 = startB - startA, n2 = endB - startB + 1;
 		long a = (startA << 1) + n1 - (left << 1);
 		long b = (startB << 1) + n2 - (left << 1);
 		int k = 0;
-		while (a-b < nt2 && a / nt2 == b / nt2) {
-//		while (a / nt2 == b / nt2) {
-//			System.out.println(a + " - " + b + "  " + k);
+		while (b-a <= nt2 && a / nt2 == b / nt2) {
 			++k;
 			a <<= 1;
 			b <<= 1;
